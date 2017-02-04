@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "641666356214",
+    "firebase_url": "https://cuidaqui-8c292.firebaseio.com",
+    "project_id": "cuidaqui-8c292",
+    "storage_bucket": "cuidaqui-8c292.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641666356214:android:381edd7ec2f25054",
+        "android_client_info": {
+          "package_name": "com.project.diegomello.cuidaqui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641666356214-svj27ppso1hlakl5a4irutds8tmekggj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6bC5KZfAYjgyDSADHou9u8F8WD4tz_nM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
