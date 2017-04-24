@@ -36,6 +36,7 @@ String server_key = "AAAAlWZLk_Y:APA91bEjB_vUWEEbbhBcOGGep2L9JIm1FcTok04nW4qOQoD
 #define WATER_CALL "WATER_CALL"
 #define BATHROOM_CALL "BATHROOM_CALL"
 #define DISCOMFORT_CALL "DISCOMFORT_CALL"
+#define EMERGENCY_CALL "EMERGENCY_CALL"
 #define REGISTRATION_ID_LABEL "REGISTRATION_ID"
 
 #define WAITING_FOR_ATTENDENCE "Paciente aguardando atendimento"
@@ -43,8 +44,9 @@ String server_key = "AAAAlWZLk_Y:APA91bEjB_vUWEEbbhBcOGGep2L9JIm1FcTok04nW4qOQoD
 #define RED_LED 16
 #define GREEN_LED 5
 #define FIRST_BUTTON 4
-#define SECOND_BUTTON 2
-#define THIRD_BUTTON 14
+#define SECOND_BUTTON 14
+#define THIRD_BUTTON 12
+#define FOURTH_BUTTON 13
 
 String app_registration_id;
 
@@ -57,6 +59,7 @@ void setup() {
   pinMode(FIRST_BUTTON,INPUT);
   pinMode(SECOND_BUTTON,INPUT);
   pinMode(THIRD_BUTTON,INPUT);
+  pinMode(FOURTH_BUTTON,INPUT);
 
   WiFiManager wifiManager;
 
@@ -114,6 +117,7 @@ void setup() {
   Firebase.setInt(BATHROOM_CALL,0);
   Firebase.setInt(DISCOMFORT_CALL,0);
   Firebase.setInt(WATER_CALL,0);
+  Firebase.setInt(EMERGENCY_CALL,0);
 }
 
 //0 : initialization code for remote control
@@ -147,6 +151,15 @@ void loop() {
     if(number != 2){
       Firebase.setInt(WATER_CALL,1);  
       sendNotification(WATER_CALL,WAITING_FOR_ATTENDENCE);     
+    }
+    blinkGreenLed();
+  }
+  if(digitalRead(FOURTH_BUTTON) == HIGH){
+    Serial.println(EMERGENCY_CALL);
+    int number = Firebase.getInt(EMERGENCY_CALL);
+    if(number != 2){
+      Firebase.setInt(EMERGENCY_CALL,1);  
+      sendNotification(EMERGENCY_CALL,WAITING_FOR_ATTENDENCE);     
     }
     blinkGreenLed();
   }
