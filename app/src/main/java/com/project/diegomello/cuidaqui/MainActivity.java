@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -29,9 +28,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.wifi_list_TextView)
-    TextView wifiListTextView;
-
     @BindView(R.id.ssid_EditText)
     EditText ssidEditText;
 
@@ -40,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.config_Button)
     Button configButton;
-
-    @BindView(R.id.clearListButton)
-    Button clearListButton;
 
     @BindView(R.id.calls_listView)
     ListView callListView;
@@ -56,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference waterRef;
     private DatabaseReference bathroomRef;
     private DatabaseReference discomfortRef;
+    private DatabaseReference emergencyRef;
 
     private CallsAdapter callAdapter;
     private ArrayList<CallItem> callListItems;
@@ -71,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         waterRef = mDatabase.getReference(Constants.WATER_CALL);
         bathroomRef = mDatabase.getReference(Constants.BATHROOM_CALL);
         discomfortRef = mDatabase.getReference(Constants.DISCOMFORT_CALL);
+        emergencyRef = mDatabase.getReference(Constants.EMERGENCY_CALL);
         setupListView();
         passwordEditText.setVisibility(View.GONE);
         ssidEditText.setVisibility(View.GONE);
@@ -85,19 +80,11 @@ public class MainActivity extends AppCompatActivity {
         //checkForWifi();
 
         firebaseSync();
-
-        clearListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callListItems.clear();
-                callAdapter.notifyDataSetChanged();
-            }
-        });
     }
 
     private void setupListView(){
         callListItems = new ArrayList<>();
-        callAdapter = new CallsAdapter(mContext,callListItems,waterRef,bathroomRef,discomfortRef);
+        callAdapter = new CallsAdapter(mContext,callListItems,waterRef,bathroomRef,discomfortRef, emergencyRef);
         callListView.setAdapter(callAdapter);
     }
 
@@ -131,6 +118,18 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer status = dataSnapshot.getValue(Integer.class);
                 listNotification(status,Constants.DISCOMFORT_CALL);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("ERRORFIREBASE", "Failed to read value.", databaseError.toException());
+            }
+        });
+        emergencyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Integer status = dataSnapshot.getValue(Integer.class);
+                listNotification(status,Constants.EMERGENCY_CALL);
             }
 
             @Override

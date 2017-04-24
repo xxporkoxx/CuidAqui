@@ -36,6 +36,7 @@ public class FirebaseInstanceIDServiceManager extends FirebaseInstanceIdService 
         //TODO Check for internet connection if it does't work, maybe it can be the problem
         registrationIDref = mDatabase.getReference(Constants.REGISTRATION_ID);
         registrationIDref.setValue(refreshedToken,Constants.REGISTRATION_ID);
+
         return true;
     }
 }

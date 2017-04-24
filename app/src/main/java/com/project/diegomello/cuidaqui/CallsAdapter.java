@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -29,14 +30,16 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
     private DatabaseReference waterRef;
     private DatabaseReference bathroomRef;
     private DatabaseReference discomfortRef;
+    private DatabaseReference emergency_ref;
 
-    public CallsAdapter(Context context, List<CallItem> objects, DatabaseReference waterRef,DatabaseReference bathroomRef,DatabaseReference discomfortRef) {
+    public CallsAdapter(Context context, List<CallItem> objects, DatabaseReference waterRef,DatabaseReference bathroomRef,DatabaseReference discomfortRef,DatabaseReference emergency_ref) {
         super(context, 0, objects);
         this.mContext = context;
         this.callItems = objects;
         this.waterRef = waterRef;
         this.bathroomRef = bathroomRef;
         this.discomfortRef = discomfortRef;
+        this.emergency_ref = emergency_ref;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -46,6 +49,7 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
         if(convertView == null){
             convertView = mInflater.inflate(R.layout.list_item_call, parent, false);
             mViewHolder = new ViewHolder();
+            mViewHolder.callLinearLayout = (LinearLayout) convertView.findViewById(R.id.list_item_call_linearLayout);
             mViewHolder.callIconImageView = (ImageView) convertView.findViewById(R.id.list_item_call_icon_image);
             mViewHolder.callNameTextView = (TextView) convertView.findViewById(R.id.list_item_call_name_textView);
             mViewHolder.callStatusTextView = (TextView) convertView.findViewById(R.id.list_item_call_status_textView);
@@ -58,17 +62,30 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
         CallItem item = callItems.get(position);
         final String callType = item.getCallType();
         final Integer status = item.getStatus();
+        int linearLayoutColor = 0;
+        int nameAndStatustextColor = R.color.white;
 
         if (callType.equals(Constants.WATER_CALL)) {
-            mViewHolder.callIconImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_water_48dp));
+            mViewHolder.callIconImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_thirsty_36dp));
+            linearLayoutColor = R.color.thirstyBlue;
         }
         else if(callType.equals(Constants.BATHROOM_CALL)){
-            mViewHolder.callIconImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_bathroom_48dp));
+            mViewHolder.callIconImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_bathroom_36dp));
+            linearLayoutColor = R.color.bathroomGreen;
         }
         else if(callType.equals(Constants.DISCOMFORT_CALL)){
-            mViewHolder.callIconImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_disconfort_48dp));
+            mViewHolder.callIconImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_assistence_36dp));
+            linearLayoutColor = R.color.assistenceYellow;
+            nameAndStatustextColor = R.color.black;
+        }
+        else if(callType.equals(Constants.EMERGENCY_CALL)){
+            mViewHolder.callIconImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_emergency_36dp));
+            linearLayoutColor = R.color.sosRed;
         }
 
+        mViewHolder.callLinearLayout.setBackgroundColor(mContext.getResources().getColor(linearLayoutColor));
+        mViewHolder.callNameTextView.setTextColor(mContext.getResources().getColor(nameAndStatustextColor));
+        mViewHolder.callStatusTextView.setTextColor(mContext.getResources().getColor(nameAndStatustextColor));
 
         if (status.equals(Constants.CALL_STATUS_INITIALIZATION)) {
             //mViewHolder.callStatusTextView.setText("");
@@ -98,6 +115,8 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
                     ref = bathroomRef;
                 else if(callType.equals(Constants.DISCOMFORT_CALL))
                     ref = discomfortRef;
+                else if(callType.equals(Constants.EMERGENCY_CALL))
+                    ref = emergency_ref;
 
                 if(status.equals(Constants.CALL_STATUS_WATING_TO_SERVE))
                     ref.setValue(Constants.CALL_STATUS_ON_THE_WAY);
@@ -115,6 +134,7 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
     }
 
     private static class ViewHolder{
+        public LinearLayout callLinearLayout;
         public ImageView callIconImageView;
         public TextView callNameTextView;
         public TextView callStatusTextView;

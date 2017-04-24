@@ -13,6 +13,8 @@ public class Constants {
     public static String DISCOMFORT_CALL = "DISCOMFORT_CALL";
     public static String BATHROOM_CALL = "BATHROOM_CALL";
     public static String WATER_CALL = "WATER_CALL";
+    public static String EMERGENCY_CALL = "EMERGENCY_CALL";
+
 
     public static String REGISTRATION_ID = "REGISTRATION_ID";
 }

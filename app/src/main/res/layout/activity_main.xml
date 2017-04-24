@@ -12,12 +12,6 @@
     tools:context="com.project.diegomello.cuidaqui.MainActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Buscando wifi..."
-        android:id="@+id/wifi_list_TextView"/>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,12 +34,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/config_Button" />
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="limpar"
-        android:id="@+id/clearListButton"/>
 
     <ListView
         android:layout_width="match_parent"
