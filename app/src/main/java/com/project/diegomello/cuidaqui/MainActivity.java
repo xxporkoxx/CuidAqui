@@ -5,40 +5,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.project.diegomello.cuidaqui.utils.Constants;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-
-    @BindView(R.id.ssid_EditText)
-    EditText ssidEditText;
-
-    @BindView(R.id.password_EditText)
-    EditText passwordEditText;
-
-    @BindView(R.id.config_Button)
-    Button configButton;
-
-    @BindView(R.id.calls_listView)
-    ListView callListView;
 
     Context mContext;
 
@@ -54,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private CallsAdapter callAdapter;
     private ArrayList<CallItem> callListItems;
 
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,104 +47,43 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         isGooglePlayServicesAvailable(this);
-        mDatabase = FirebaseDatabase.getInstance();
-        waterRef = mDatabase.getReference(Constants.WATER_CALL);
-        bathroomRef = mDatabase.getReference(Constants.BATHROOM_CALL);
-        discomfortRef = mDatabase.getReference(Constants.DISCOMFORT_CALL);
-        emergencyRef = mDatabase.getReference(Constants.EMERGENCY_CALL);
-        setupListView();
-        passwordEditText.setVisibility(View.GONE);
-        ssidEditText.setVisibility(View.GONE);
-        configButton.setVisibility(View.GONE);
+        createTabViews();
+    }
+
+    protected void createTabViews(){
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });*/
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isGooglePlayServicesAvailable(this);
-        //TODO implement wi fi configutration on app
-        //checkForWifi();
-
-        firebaseSync();
     }
 
-    private void setupListView(){
-        callListItems = new ArrayList<>();
-        callAdapter = new CallsAdapter(mContext,callListItems,waterRef,bathroomRef,discomfortRef, emergencyRef);
-        callListView.setAdapter(callAdapter);
-    }
 
-    private void firebaseSync(){
-        waterRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Integer status = dataSnapshot.getValue(Integer.class);
-                listNotification(status,Constants.WATER_CALL);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("ERRORFIREBASE", "Failed to read value.", databaseError.toException());
-            }
-        });
-        bathroomRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Integer status = dataSnapshot.getValue(Integer.class);
-                listNotification(status,Constants.BATHROOM_CALL);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("ERRORFIREBASE", "Failed to read value.", databaseError.toException());
-            }
-        });
-        discomfortRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Integer status = dataSnapshot.getValue(Integer.class);
-                listNotification(status,Constants.DISCOMFORT_CALL);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("ERRORFIREBASE", "Failed to read value.", databaseError.toException());
-            }
-        });
-        emergencyRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Integer status = dataSnapshot.getValue(Integer.class);
-                listNotification(status,Constants.EMERGENCY_CALL);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("ERRORFIREBASE", "Failed to read value.", databaseError.toException());
-            }
-        });
-    }
-
-    private void listNotification(Integer status, String callType){
-        boolean alreadyNotified = false;
-        int i;
-        for(i=0; i < callListItems.size() ;i++) {
-            if (callListItems.get(i).getCallType().equals(callType)){
-                alreadyNotified=true;
-                break;
-            }
-        }
-        //Toast.makeText(mContext,"entrou",Toast.LENGTH_LONG).show();
-        if(!status.equals(Constants.CALL_STATUS_INITIALIZATION) && !alreadyNotified){
-            callListItems.add(new CallItem(callType,"Paciente",status));
-        }
-        else if((status.equals(Constants.CALL_STATUS_ON_THE_WAY)||status.equals(Constants.CALL_STATUS_SERVED)) && alreadyNotified){
-            if(callListItems.get(i)!=null)
-                callListItems.get(i).setStatus(status);
-        }
-
-        callAdapter.notifyDataSetChanged();
-    }
 
     /*private void checkForWifi(){
         final WifiManager wifiManager = (WifiManager) this.getSystemService(mContext.WIFI_SERVICE);
@@ -248,6 +173,51 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a SectionOneFragment (defined as a static inner class below).
+            switch (position) {
+                case 0:
+                    return SectionOneFragment.newInstance(position);
+                case 1:
+                    return SectionTwoFragment.newInstance(position);
+                case 2:
+                    return SectionThreeFragment.newInstance(position);
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "CHAMADAS";
+                case 1:
+                    return "MENSAL";
+                case 2:
+                    return "HISTÓRICO";
+            }
+            return null;
+        }
     }
 }
 
