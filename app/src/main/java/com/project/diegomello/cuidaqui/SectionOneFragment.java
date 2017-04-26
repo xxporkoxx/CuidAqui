@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.firebase.crash.FirebaseCrash;
@@ -22,6 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.diegomello.cuidaqui.utils.Constants;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by DiegoMello on 4/26/2017.
@@ -36,13 +40,16 @@ public class SectionOneFragment extends Fragment {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
+    @BindView(R.id.password_EditText)
     EditText ssidEditText;
-
+    @BindView(R.id.ssid_EditText)
     EditText passwordEditText;
-
+    @BindView(R.id.config_Button)
     Button configButton;
-
+    @BindView(R.id.calls_listView)
     ListView callListView;
+    @BindView(R.id.section_one_empty_list_imageView)
+    ImageView emptyListImageView;
 
     Context mContext;
 
@@ -77,11 +84,11 @@ public class SectionOneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.section_one_fragment, container, false);
-        callListView = (ListView) rootView.findViewById(R.id.calls_listView);
-        ssidEditText = (EditText) rootView.findViewById(R.id.ssid_EditText);
-        passwordEditText = (EditText) rootView.findViewById(R.id.password_EditText);
-        configButton = (Button) rootView.findViewById(R.id.config_Button);
-        //ButterKnife.bind(this, rootView);
+        //callListView = (ListView) rootView.findViewById(R.id.calls_listView);
+        //ssidEditText = (EditText) rootView.findViewById(R.id.ssid_EditText);
+        //passwordEditText = (EditText) rootView.findViewById(R.id.password_EditText);
+        //configButton = (Button) rootView.findViewById(R.id.config_Button);
+        ButterKnife.bind(this, rootView);
         //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
         return rootView;
     }
@@ -115,6 +122,7 @@ public class SectionOneFragment extends Fragment {
         callListItems = new ArrayList<>();
         callAdapter = new CallsAdapter(mContext,callListItems,waterRef,bathroomRef,discomfortRef, emergencyRef);
         callListView.setAdapter(callAdapter);
+        callListView.setEmptyView(emptyListImageView);
     }
 
     private void firebaseSync(){
