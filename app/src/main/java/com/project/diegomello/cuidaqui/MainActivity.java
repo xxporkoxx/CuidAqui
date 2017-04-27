@@ -10,7 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -81,8 +86,71 @@ public class MainActivity extends AppCompatActivity {
         isGooglePlayServicesAvailable(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_rename_patient) {
+            buildRenamePersonDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void buildRenamePersonDialog(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this,R.style.MyAlertDialogStyle);
+        alertDialog.setTitle("Renomear Paciente");
+        alertDialog.setMessage("Escreva o nome do seu paciente:");
+
+        final EditText input = new EditText(MainActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        //lp.setMargins(10,0,10,0);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+        alertDialog.setIcon(android.R.drawable.ic_menu_edit);
+
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                       /* password = input.getText().toString();
+                        if (password.compareTo("") == 0) {
+                            if (pass.equals(password)) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Password Matched", Toast.LENGTH_SHORT).show();
+                                Intent myIntent1 = new Intent(view.getContext(),
+                                        Show.class);
+                                startActivityForResult(myIntent1, 0);
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Wrong Password!", Toast.LENGTH_SHORT).show();
+                            }
+                        }*/
+                    }
+                });
+
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
 
 
     /*private void checkForWifi(){

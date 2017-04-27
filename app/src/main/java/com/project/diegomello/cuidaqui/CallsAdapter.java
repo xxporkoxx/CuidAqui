@@ -91,16 +91,16 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
             //mViewHolder.callStatusTextView.setText("");
         }
         else if(status.equals(Constants.CALL_STATUS_WATING_TO_SERVE)){
-            mViewHolder.callStatusTextView.setText("Aguardando atendimento");
-            mViewHolder.callActionButton.setText("ATENDER");
+            mViewHolder.callStatusTextView.setText(R.string.call_waiting_to_serve_text);
+            mViewHolder.callActionButton.setText(R.string.call_waiting_button_text);
         }
         else if(status.equals(Constants.CALL_STATUS_ON_THE_WAY)){
-            mViewHolder.callStatusTextView.setText("Enfermeiro a caminho");
-            mViewHolder.callActionButton.setText("CONCLUIR");
+            mViewHolder.callStatusTextView.setText(R.string.call_on_the_way_text);
+            mViewHolder.callActionButton.setText(R.string.call_on_the_way_button_text);
         }
         else if(status.equals(Constants.CALL_STATUS_SERVED)){
-            mViewHolder.callStatusTextView.setText("Chamada atendida");
-            mViewHolder.callActionButton.setText("DELETAR");
+            mViewHolder.callStatusTextView.setText(R.string.call_served_text);
+            mViewHolder.callActionButton.setText(R.string.call_served_button_text);
         }
 
         mViewHolder.callNameTextView.setText(item.getName());

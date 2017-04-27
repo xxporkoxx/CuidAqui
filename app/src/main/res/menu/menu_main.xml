@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.diegomello.tabedaplicationn.MainActivity">
+    <item
+        android:id="@+id/action_rename_patient"
+        android:orderInCategory="100"
+        android:title="@string/rename_patient"
+        app:showAsAction="never" />
+</menu>
