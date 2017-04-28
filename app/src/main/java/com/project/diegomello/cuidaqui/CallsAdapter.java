@@ -133,6 +133,13 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
         return convertView;
     }
 
+    public void refreshPatientName(String patientName){
+        for(int i=0;i < callItems.size();i++){
+            callItems.get(i).setPatientName(patientName);
+        }
+        notifyDataSetChanged();
+    }
+
     private static class ViewHolder{
         public LinearLayout callLinearLayout;
         public ImageView callIconImageView;

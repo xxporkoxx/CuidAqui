@@ -2,7 +2,9 @@
     <string name="app_name">WeBeep</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <string name="rename_patient">Renomear Paciente</string>
+    <string name="rename_patient_menu_text">Renomear Paciente</string>
+
+    <string name="rename_patient_sucesfull_toast_text"> foi registrado com sucesso!</string>
 
     <string name="call_waiting_to_serve_text">Aguardando cuidado</string>
     <string name="call_on_the_way_text">Pessoa a caminho</string>

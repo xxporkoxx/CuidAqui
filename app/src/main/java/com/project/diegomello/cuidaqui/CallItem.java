@@ -30,4 +30,8 @@ public class CallItem {
     public String getName() {
         return name;
     }
+
+    public void setPatientName(String name) {
+        this.name = name;
+    }
 }

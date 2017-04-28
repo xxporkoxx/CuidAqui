@@ -17,4 +17,7 @@ public class Constants {
 
 
     public static String REGISTRATION_ID = "REGISTRATION_ID";
+
+    public static String PACIENT_SHARED_PREF = "PACIENT_SHARED_PREF";
+    public static String PACIENT_SHARED_PREF_NAME_STRING = "PACIENT_SHARED_PREF_NAME_STRING";
 }

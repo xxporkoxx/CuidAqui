@@ -20,12 +20,18 @@
         <item name="colorAccent">#0AAEEF</item>
     </style>
 -->
+    <!-- ALERT DIALOG STYLE -->
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!-- Used for the buttons -->
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/black</item>
         <!-- Used for the title and text -->
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <!-- Used for the background -->
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:editTextStyle">@style/WhiteEditText</item>
+    </style>
+
+    <style name="WhiteEditText" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

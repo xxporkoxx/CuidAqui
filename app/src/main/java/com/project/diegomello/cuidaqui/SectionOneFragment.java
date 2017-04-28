@@ -188,7 +188,8 @@ public class SectionOneFragment extends Fragment {
         }
         //Toast.makeText(mContext,"entrou",Toast.LENGTH_LONG).show();
         if(!status.equals(Constants.CALL_STATUS_INITIALIZATION) && !alreadyNotified){
-            callListItems.add(new CallItem(callType,"Paciente",status));
+            String patientName= mContext.getSharedPreferences(Constants.PACIENT_SHARED_PREF, 0).getString(Constants.PACIENT_SHARED_PREF_NAME_STRING, "Pacinente");
+            callListItems.add(new CallItem(callType,patientName,status));
         }
         else if((status.equals(Constants.CALL_STATUS_ON_THE_WAY)||status.equals(Constants.CALL_STATUS_SERVED)) && alreadyNotified){
             if(callListItems.get(i)!=null)
@@ -196,5 +197,9 @@ public class SectionOneFragment extends Fragment {
         }
 
         callAdapter.notifyDataSetChanged();
+    }
+
+    public void refreshPatientName(String patientName){
+        callAdapter.refreshPatientName(patientName);
     }
 }

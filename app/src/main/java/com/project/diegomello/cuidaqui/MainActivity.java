@@ -3,7 +3,7 @@ package com.project.diegomello.cuidaqui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.wifi.ScanResult;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,13 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
+import com.project.diegomello.cuidaqui.utils.Constants;
 
 import butterknife.ButterKnife;
 
@@ -30,20 +28,12 @@ public class MainActivity extends AppCompatActivity {
 
     Context mContext;
 
-    private ScanResult network;
-
-    private FirebaseDatabase mDatabase;
-
-    private DatabaseReference waterRef;
-    private DatabaseReference bathroomRef;
-    private DatabaseReference discomfortRef;
-    private DatabaseReference emergencyRef;
-
-    private CallsAdapter callAdapter;
-    private ArrayList<CallItem> callListItems;
-
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+
+    private SectionOneFragment mSectionOneFragment;
+    private SectionTwoFragment mSectionTwoFragment;
+    private SectionThreeFragment mSectionThreeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +129,16 @@ public class MainActivity extends AppCompatActivity {
                                         "Wrong Password!", Toast.LENGTH_SHORT).show();
                             }
                         }*/
+
+                        SharedPreferences settings = getSharedPreferences(Constants.PACIENT_SHARED_PREF, 0);
+                        SharedPreferences.Editor editor = settings.edit();
+                        String patientName = input.getText().toString();
+                        editor.putString(Constants.PACIENT_SHARED_PREF_NAME_STRING,patientName);
+                        editor.commit();
+
+                        Toast.makeText(mContext, patientName+" "+getResources().getString(R.string.rename_patient_sucesfull_toast_text),Toast.LENGTH_LONG).show();
+
+                        mSectionOneFragment.refreshPatientName(patientName);
                     }
                 });
 
@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
         alertDialog.show();
     }
-
 
     /*private void checkForWifi(){
         final WifiManager wifiManager = (WifiManager) this.getSystemService(mContext.WIFI_SERVICE);
@@ -259,11 +258,11 @@ public class MainActivity extends AppCompatActivity {
             // Return a SectionOneFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return SectionOneFragment.newInstance(position);
+                    return mSectionOneFragment = SectionOneFragment.newInstance(position);
                 case 1:
-                    return SectionTwoFragment.newInstance(position);
+                    return mSectionTwoFragment = SectionTwoFragment.newInstance(position);
                 case 2:
-                    return SectionThreeFragment.newInstance(position);
+                    return mSectionThreeFragment = SectionThreeFragment.newInstance(position);
             }
             return null;
         }
