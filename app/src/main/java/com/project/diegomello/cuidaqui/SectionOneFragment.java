@@ -1,6 +1,9 @@
 package com.project.diegomello.cuidaqui;
 
 import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -190,6 +193,7 @@ public class SectionOneFragment extends Fragment {
         if(!status.equals(Constants.CALL_STATUS_INITIALIZATION) && !alreadyNotified){
             String patientName= mContext.getSharedPreferences(Constants.PACIENT_SHARED_PREF, 0).getString(Constants.PACIENT_SHARED_PREF_NAME_STRING, "Pacinente");
             callListItems.add(new CallItem(callType,patientName,status));
+            notificationRingtoneAlarm();
         }
         else if((status.equals(Constants.CALL_STATUS_ON_THE_WAY)||status.equals(Constants.CALL_STATUS_SERVED)) && alreadyNotified){
             if(callListItems.get(i)!=null)
@@ -197,6 +201,16 @@ public class SectionOneFragment extends Fragment {
         }
 
         callAdapter.notifyDataSetChanged();
+    }
+
+    private void notificationRingtoneAlarm(){
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(mContext, notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void refreshPatientName(String patientName){

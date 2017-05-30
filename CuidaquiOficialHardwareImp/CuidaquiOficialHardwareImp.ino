@@ -43,10 +43,10 @@ String server_key = "AAAAlWZLk_Y:APA91bEjB_vUWEEbbhBcOGGep2L9JIm1FcTok04nW4qOQoD
 
 #define RED_LED 16
 #define GREEN_LED 5
-#define FIRST_BUTTON 4
-#define SECOND_BUTTON 14
-#define THIRD_BUTTON 12
-#define FOURTH_BUTTON 13
+#define FIRST_BUTTON 14 //emergency
+#define SECOND_BUTTON 12 //casa de banho
+#define THIRD_BUTTON 13 //auxílio
+#define FOURTH_BUTTON 4  //sede
 
 String app_registration_id;
 
