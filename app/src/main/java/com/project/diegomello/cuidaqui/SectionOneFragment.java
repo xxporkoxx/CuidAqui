@@ -1,6 +1,7 @@
 package com.project.diegomello.cuidaqui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -68,6 +69,8 @@ public class SectionOneFragment extends Fragment {
     private CallsAdapter callAdapter;
     private ArrayList<CallItem> callListItems;
 
+    private SharedPreferences patientSharedPrefs;
+
     public SectionOneFragment() {
     }
 
@@ -100,6 +103,7 @@ public class SectionOneFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        patientSharedPrefs = mContext.getSharedPreferences(Constants.PATIENT_SHARED_PREF, 0);
     }
 
     @Override
@@ -191,7 +195,7 @@ public class SectionOneFragment extends Fragment {
         }
         //Toast.makeText(mContext,"entrou",Toast.LENGTH_LONG).show();
         if(!status.equals(Constants.CALL_STATUS_INITIALIZATION) && !alreadyNotified){
-            String patientName= mContext.getSharedPreferences(Constants.PACIENT_SHARED_PREF, 0).getString(Constants.PACIENT_SHARED_PREF_NAME_STRING, "Pacinente");
+            String patientName= mContext.getSharedPreferences(Constants.PATIENT_SHARED_PREF, 0).getString(Constants.PATIENT_SHARED_PREF_NAME_STRING, "Pacinente");
             callListItems.add(new CallItem(callType,patientName,status));
             notificationRingtoneAlarm();
         }
@@ -199,6 +203,7 @@ public class SectionOneFragment extends Fragment {
             if(callListItems.get(i)!=null)
                 callListItems.get(i).setStatus(status);
         }
+        countCallAndStoreOnCash(callType,status);
 
         callAdapter.notifyDataSetChanged();
     }
@@ -211,6 +216,19 @@ public class SectionOneFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void countCallAndStoreOnCash(String callType,Integer status){
+        if(status.equals(Constants.CALL_STATUS_SERVED)){
+            SharedPreferences.Editor editor = patientSharedPrefs.edit();
+
+            String string = "PATIENT_CALL_COUNTER_"+callType;
+            string = string.substring(0, string.length() - 5);
+            editor.putInt(string, patientSharedPrefs.getInt(string,0)+1);
+
+            editor.commit();
+        }
+
     }
 
     public void refreshPatientName(String patientName){

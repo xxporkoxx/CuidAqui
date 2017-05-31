@@ -1,11 +1,16 @@
 package com.project.diegomello.cuidaqui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.project.diegomello.cuidaqui.utils.Constants;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.project.diegomello.cuidaqui.utils.Utils.mContext;
@@ -17,6 +22,21 @@ import static com.project.diegomello.cuidaqui.utils.Utils.mContext;
 public class SectionTwoFragment extends android.support.v4.app.Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    private SharedPreferences patientSharedPrefs;
+
+    @BindView(R.id.section_two_fragment_emergency_textView)
+    TextView emergencyTextView;
+
+    @BindView(R.id.section_two_fragment_bathroom_textView)
+    TextView bathroomTextView;
+
+    @BindView(R.id.section_two_fragment_discomfort_textView)
+    TextView discomfortTextView;
+
+    @BindView(R.id.section_two_fragment_water_textView)
+    TextView waterTextView;
+
 
     public SectionTwoFragment() {
     }
@@ -46,6 +66,19 @@ public class SectionTwoFragment extends android.support.v4.app.Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        patientSharedPrefs = mContext.getSharedPreferences(Constants.PATIENT_SHARED_PREF, 0);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshCallCounter();
+    }
+
+    public void refreshCallCounter(){
+        emergencyTextView.setText(mContext.getResources().getText(R.string.section_two_emergency_call_counter_label_string)+" "+patientSharedPrefs.getInt(Constants.PATIENT_CALL_COUNTER_EMERGENCY,0));
+        bathroomTextView.setText(mContext.getResources().getText(R.string.section_two_bathroom_call_counter_label_string)+" "+patientSharedPrefs.getInt(Constants.PATIENT_CALL_COUNTER_BATHROOM,0));
+        discomfortTextView.setText(mContext.getResources().getText(R.string.section_two_discomfort_call_counter_label_string)+" "+patientSharedPrefs.getInt(Constants.PATIENT_CALL_COUNTER_DISCOMFORT,0));
+        waterTextView.setText(mContext.getResources().getText(R.string.section_two_water_call_counter_label_string)+" "+patientSharedPrefs.getInt(Constants.PATIENT_CALL_COUNTER_WATER,0));
+    }
 }
