@@ -13,9 +13,4 @@
     <string name="call_waiting_button_text">ATENDER</string>
     <string name="call_on_the_way_button_text">CONCLUIR</string>
     <string name="call_served_button_text">DELETAR</string>
-
-    <string name="section_two_emergency_call_counter_label_string">S.O.S.:</string>
-    <string name="section_two_bathroom_call_counter_label_string">CASA DE BANHO:</string>
-    <string name="section_two_discomfort_call_counter_label_string">AUXÍLIO:</string>
-    <string name="section_two_water_call_counter_label_string">SEDE:</string>
 </resources>

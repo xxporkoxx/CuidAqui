@@ -4,36 +4,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Número Chamadas"
-        android:textSize="24sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="S.O.S.: X"
-        android:textSize="20sp"
-        android:id="@+id/section_two_fragment_emergency_textView"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CASA DE BANHO: X"
-        android:textSize="20sp"
-        android:id="@+id/section_two_fragment_bathroom_textView"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AUXÍLIO: X"
-        android:textSize="20sp"
-        android:id="@+id/section_two_fragment_discomfort_textView"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SEDE: X"
-        android:textSize="20sp"
-        android:id="@+id/section_two_fragment_water_textView"/>
+        android:text="TEste de layout section 2 "/>
 
 </LinearLayout>

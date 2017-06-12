@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private SectionTwoFragment mSectionTwoFragment;
     private SectionThreeFragment mSectionThreeFragment;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,25 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if(position == 1 ){
-                    mSectionTwoFragment.refreshCallCounter();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -151,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }*/
 
-                        SharedPreferences settings = getSharedPreferences(Constants.PATIENT_SHARED_PREF, 0);
+                        SharedPreferences settings = getSharedPreferences(Constants.PACIENT_SHARED_PREF, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         String patientName = input.getText().toString();
-                        editor.putString(Constants.PATIENT_SHARED_PREF_NAME_STRING,patientName);
+                        editor.putString(Constants.PACIENT_SHARED_PREF_NAME_STRING,patientName);
                         editor.commit();
 
                         Toast.makeText(mContext, patientName+" "+getResources().getString(R.string.rename_patient_sucesfull_toast_text),Toast.LENGTH_LONG).show();

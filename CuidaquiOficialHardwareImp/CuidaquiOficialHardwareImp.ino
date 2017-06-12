@@ -39,11 +39,6 @@ String server_key = "AAAAlWZLk_Y:APA91bEjB_vUWEEbbhBcOGGep2L9JIm1FcTok04nW4qOQoD
 #define EMERGENCY_CALL "EMERGENCY_CALL"
 #define REGISTRATION_ID_LABEL "REGISTRATION_ID"
 
-#define WATER_CALL_MESSAGE "Pedido: Água"
-#define BATHROOM_CALL_MESSAGE "Pedido: Casa de Banho"
-#define DISCOMFORT_CALL_MESSAGE "Pedido: Auxílio"
-#define EMERGENCY_CALL_MESSAGE "Pedido: Emergência!"
-
 #define WAITING_FOR_ATTENDENCE "Paciente aguardando atendimento"
 
 #define RED_LED 16
@@ -137,7 +132,7 @@ void loop() {
     int number = Firebase.getInt(BATHROOM_CALL);
     if(number != 2 ){
       Firebase.setInt(BATHROOM_CALL,1);
-      sendNotification(BATHROOM_CALL_MESSAGE,WAITING_FOR_ATTENDENCE); 
+      sendNotification(BATHROOM_CALL,WAITING_FOR_ATTENDENCE); 
     }
     blinkGreenLed();
   }
@@ -146,7 +141,7 @@ void loop() {
     int number = Firebase.getInt(DISCOMFORT_CALL);
     if(number != 2){
       Firebase.setInt(DISCOMFORT_CALL,1);
-      sendNotification(DISCOMFORT_CALL_MESSAGE,WAITING_FOR_ATTENDENCE); 
+      sendNotification(DISCOMFORT_CALL,WAITING_FOR_ATTENDENCE); 
     }
     blinkGreenLed();
   }
@@ -155,7 +150,7 @@ void loop() {
     int number = Firebase.getInt(WATER_CALL);
     if(number != 2){
       Firebase.setInt(WATER_CALL,1);  
-      sendNotification(WATER_CALL_MESSAGE,WAITING_FOR_ATTENDENCE);     
+      sendNotification(WATER_CALL,WAITING_FOR_ATTENDENCE);     
     }
     blinkGreenLed();
   }
@@ -164,7 +159,7 @@ void loop() {
     int number = Firebase.getInt(EMERGENCY_CALL);
     if(number != 2){
       Firebase.setInt(EMERGENCY_CALL,1);  
-      sendNotification(EMERGENCY_CALL_MESSAGE,WAITING_FOR_ATTENDENCE);     
+      sendNotification(EMERGENCY_CALL,WAITING_FOR_ATTENDENCE);     
     }
     blinkGreenLed();
   }
