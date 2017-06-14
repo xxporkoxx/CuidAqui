@@ -20,4 +20,14 @@ public class Constants {
 
     public static String PACIENT_SHARED_PREF = "PACIENT_SHARED_PREF";
     public static String PACIENT_SHARED_PREF_NAME_STRING = "PACIENT_SHARED_PREF_NAME_STRING";
+
+    //REMEBER TO ALWAYS CHANGE THE LINK FOR PRODUCTION
+    public static final String BASE_URL ="http://f93d9544.ngrok.io";
+    public static final String NEW_CALL_ON_SOCKET_CALLBACK = "NEW_CALL_ON_SOCKET_CALLBACK";
+    public static final String CONNECT_CENTRAL_TO_SOCKET = "CONNECT_CENTRAL_TO_SOCKET";
+    public static final String socketConnected = "socketConnected";
+    public static final String SOLVE_CALL_SOCKET_CALLBACK = "SOLVE_CALL_SOCKET_CALLBACK";
+    public static final String CONNECT_CENTRAL_SUCESS_EMIT= "CONNECT_CENTRAL_SUCESS_EMIT";
+    public static final String CONNECT_CENTRAL_ERROR_EMIT = "CONNECT_CENTRAL_ERROR_EMIT";
+    public static final String DISCONNECT_CENTRAL = "DISCONNECT_CENTRAL";
 }

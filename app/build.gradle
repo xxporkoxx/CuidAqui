@@ -36,7 +36,10 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
     compile 'com.google.android.gms:play-services:9.6.1'
     compile 'com.android.support:design:24.2.1'
-
+    compile ('io.socket:socket.io-client:0.8.3') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
