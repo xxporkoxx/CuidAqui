@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.project.diegomello.cuidaqui.models.CallItem;
 import com.project.diegomello.cuidaqui.utils.Constants;
 
 import java.util.ArrayList;
@@ -197,7 +198,7 @@ public class SectionOneFragment extends Fragment {
         }
         else if((status.equals(Constants.CALL_STATUS_ON_THE_WAY)||status.equals(Constants.CALL_STATUS_SERVED)) && alreadyNotified){
             if(callListItems.get(i)!=null)
-                callListItems.get(i).setStatus(status);
+                callListItems.get(i).setCallstatus(status);
         }
 
         callAdapter.notifyDataSetChanged();

@@ -6,10 +6,12 @@
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="grey">#bababa</color>
 
     <!-- Buttons colors -->
     <color name="bathroomGreen">#4caf50</color>
     <color name="sosRed">#f2372a</color>
     <color name="assistenceYellow">#ffeb3b</color>
     <color name="thirstyBlue">#2196f3</color>
+    <color name="especific">#c921f3</color>
 </resources>

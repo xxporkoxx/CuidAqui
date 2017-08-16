@@ -3,6 +3,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="rename_patient_menu_text">Renomear Paciente</string>
+    <string name="refresh_list_menu_text">Atualizar lista</string>
 
     <string name="rename_patient_sucesfull_toast_text"> foi registrado com sucesso!</string>
 

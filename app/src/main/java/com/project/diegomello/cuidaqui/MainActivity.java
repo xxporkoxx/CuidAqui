@@ -34,8 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private SectionOneFragment mSectionOneFragment;
     private SectionTwoFragment mSectionTwoFragment;
     private SectionThreeFragment mSectionThreeFragment;
-
-
+/*
+    SectionsPagerAdapter getmSectionsPagerAdapter(){
+        return mSectionsPagerAdapter;
+    }
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        mViewPager.setCurrentItem(0);
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_rename_patient) {
             buildRenamePersonDialog();
             return true;
+        }
+        else if(id == R.id.action_refresh){
+            if(mSectionTwoFragment!=null)
+                mSectionTwoFragment.refresh();
+            else
+                mSectionsPagerAdapter.getItem(1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -187,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.4.1/").build();
 
-                            final RemoteControlAPI remoteControlAPI = retrofit.create(RemoteControlAPI.class);
+                            final RestApi remoteControlAPI = retrofit.create(RestApi.class);
 
                             //GET REQUEST
                             Thread t = new Thread() {
@@ -259,9 +270,9 @@ public class MainActivity extends AppCompatActivity {
             // Return a SectionOneFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return mSectionOneFragment = SectionOneFragment.newInstance(position);
-                case 1:
                     return mSectionTwoFragment = SectionTwoFragment.newInstance(position);
+                case 1:
+                    return mSectionOneFragment = SectionOneFragment.newInstance(position);
                 case 2:
                     return mSectionThreeFragment = SectionThreeFragment.newInstance(position);
             }
@@ -271,18 +282,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "CHAMADAS";
+                    return "APLICATIVO";
                 case 1:
-                    return "MENSAL";
+                    return "DISPOSITIVO";
                 case 2:
-                    return "HISTÓRICO";
+                    return "NADA";
             }
             return null;
         }

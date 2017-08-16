@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
+import com.project.diegomello.cuidaqui.models.CallItem;
 import com.project.diegomello.cuidaqui.utils.Constants;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class CallsAdapter extends ArrayAdapter<CallItem> {
 
         CallItem item = callItems.get(position);
         final String callType = item.getCallType();
-        final Integer status = item.getStatus();
+        final Integer status = item.getCallstatus();
         int linearLayoutColor = 0;
         int nameAndStatustextColor = R.color.white;
 
