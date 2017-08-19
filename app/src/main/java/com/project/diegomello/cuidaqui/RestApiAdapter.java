@@ -66,6 +66,10 @@ public class RestApiAdapter {
     public void getCallsRestApi(Callback<ArrayList<CallItem>> callback){
         mRestApi.getCallsFromApi().enqueue(callback);
     }
+
+    public void getRootPage(Callback<String> callback){
+        mRestApi.getRootPage().enqueue(callback);
+    }
 /*
     public void postCreateCallRestApi(Callback<Patient> callback, Integer calltype,
                                       Integer callstatus, String patientid){

@@ -27,7 +27,7 @@ public class Constants {
     public static String PACIENT_SHARED_PREF_NAME_STRING = "PACIENT_SHARED_PREF_NAME_STRING";
 
     //REMEBER TO ALWAYS CHANGE THE LINK FOR PRODUCTION
-    public static final String BASE_URL ="http://caee3158.ngrok.io";
+    public static final String BASE_URL ="https://clickvalidationbackend.herokuapp.com";
     public static final String NEW_CALL_ON_SOCKET_CALLBACK = "NEW_CALL_ON_SOCKET_CALLBACK";
     public static final String CONNECT_CENTRAL_TO_SOCKET = "CONNECT_CENTRAL_TO_SOCKET";
     public static final String socketConnected = "socketConnected";
@@ -35,6 +35,7 @@ public class Constants {
     public static final String CONNECT_CENTRAL_SUCESS_EMIT= "CONNECT_CENTRAL_SUCESS_EMIT";
     public static final String CONNECT_CENTRAL_ERROR_EMIT = "CONNECT_CENTRAL_ERROR_EMIT";
     public static final String DISCONNECT_CENTRAL = "DISCONNECT_CENTRAL";
+    public static final String FIREBASE_FAKE_API_FOR_EMULATOR = "FAKEFIREBASEAPIKEYCUSTOMPHONE5.0.0-API21-768X1280";
 
     //LIST VIEW SECTION TWO SEPARATORS TYPES
     public static final Integer SECTION_TWO_NORMAL_CALL_TYPE_ITEM = 0;

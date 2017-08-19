@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.project.diegomello.cuidaqui.models.CallItem;
@@ -166,6 +165,32 @@ public class SectionTwoFragment extends android.support.v4.app.Fragment {
         mContext = getActivity();
         mWaitingAtendenceSound = MediaPlayer.create(mContext,R.raw.waiting_atendence_sound);
         mWaitingAtendenceSound.setLooping(true);
+
+      /*  new CountDownTimer(30000, 10000){
+            public void onTick(long millisUntilFinished) {
+                if(mSocket!=null)
+                    mRestApiAdapter.getRootPage(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            Log.d("ROOTPAGE",response.toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(mContext,"Conexão Perdida, reinicie o aplicativo",Toast.LENGTH_LONG).show();
+                        }
+                    });
+            }
+            public void onFinish() {
+                start();
+            }
+        }.start();*/
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         try {
             mSocket = IO.socket(Constants.BASE_URL);
         } catch (URISyntaxException e) {
@@ -178,14 +203,13 @@ public class SectionTwoFragment extends android.support.v4.app.Fragment {
                 Log.d("socketConnected",(String)args[0]);
             }
         });
-        Log.d("FIREBASEID",FirebaseInstanceId.getInstance().getToken());
-//        mSocket.emit(Constants.CONNECT_CENTRAL_TO_SOCKET, (FirebaseInstanceId.getInstance().getToken()==null)?"fCaWbbhCtf8:APA91bEwH0_yM5pd6jujveDxHQUz8iN5Qye4d53HPNp95or-oARtspCtRq5tgv1xJ3a68QUmouzw7erggGR_KXTqmZog2j4UOx0kYqOLtUhl87N0_BJuzXh-4bH2vO0mQbgJX8q9Qcxf":FirebaseInstanceId.getInstance().getToken());
-        mSocket.emit(Constants.CONNECT_CENTRAL_TO_SOCKET, FirebaseInstanceId.getInstance().getToken());
+        mSocket.emit(Constants.CONNECT_CENTRAL_TO_SOCKET, Utils.returnFirebaseKey());
+        Log.d("FIREBASEID",Utils.returnFirebaseKey());
         mSocket.on(Constants.CONNECT_CENTRAL_SUCESS_EMIT, mConnectCentralSucess = new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 Log.d("CONNECT_CENTRAL_SUCESS",(args[0]).toString());
-                ((MainActivity)Utils.mContext).runOnUiThread(new Runnable() {
+                ((MainActivity) Utils.mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(Utils.mContext,"Conectado ao Serviço",Toast.LENGTH_LONG).show();
@@ -229,7 +253,6 @@ public class SectionTwoFragment extends android.support.v4.app.Fragment {
                         Toast.makeText(Utils.mContext,"Chamada Resolvida",Toast.LENGTH_LONG).show();
                         CallItem solvedcallItem = mParser.fromJson(args[0].toString(),CallItem.class);
                         mSectionTwoCallAdapter.solveCallItem(solvedcallItem);
-                        mSectionTwoCallAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -240,7 +263,7 @@ public class SectionTwoFragment extends android.support.v4.app.Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        mSocket.emit(Constants.DISCONNECT_CENTRAL,FirebaseInstanceId.getInstance().getToken().trim());
+        mSocket.emit(Constants.DISCONNECT_CENTRAL,Utils.returnFirebaseKey().trim());
         mSocket.disconnect();
         mSocket.off(Constants.NEW_CALL_ON_SOCKET_CALLBACK, mConnectCallBack);
         mSocket.off(Constants.NEW_CALL_ON_SOCKET_CALLBACK, mNewCallBack);

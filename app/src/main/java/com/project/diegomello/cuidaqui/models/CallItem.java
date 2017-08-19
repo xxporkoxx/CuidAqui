@@ -13,6 +13,7 @@ public class CallItem implements Comparable<CallItem> {
     @SerializedName("_id")
     private String _id;
 
+    @SerializedName("name")
     private String name;
 
     @SerializedName("callstatus")

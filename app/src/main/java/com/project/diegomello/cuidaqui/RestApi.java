@@ -22,4 +22,7 @@ public interface RestApi {
 
     @retrofit2.http.GET("calls/")
     Call<ArrayList<CallItem>> getCallsFromApi();
+
+    @retrofit2.http.GET("/")
+    Call<String> getRootPage();
 }

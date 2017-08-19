@@ -1,6 +1,8 @@
 package com.project.diegomello.cuidaqui;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by DiegoMello on 8/10/2017.
@@ -33,7 +38,10 @@ public class SectionTwoCallAdapter extends ArrayAdapter<CallItem> {
     private ViewHolder mViewHolder;
     private LayoutInflater mInflater;
 
-    private SimpleDateFormat dateFormat;
+    MediaPlayer alertSound;
+
+    private SimpleDateFormat hourDateFormat;
+    private SimpleDateFormat dayDateFormat;
 
 
     public SectionTwoCallAdapter(Context context, ArrayList<Patient> patients, ArrayList<CallItem> callItems) {
@@ -42,27 +50,45 @@ public class SectionTwoCallAdapter extends ArrayAdapter<CallItem> {
         this.callItems = callItems;
         organizeListView();
         this.patients = patients;
-        this.dateFormat = new SimpleDateFormat("hh:mm aa");
+        this.hourDateFormat = new SimpleDateFormat("hh:mm aa",new Locale("en","PT"));
+        this.dayDateFormat = new SimpleDateFormat("dd/MM/yyyy");//,new Locale("pt","PT")
+        alertSound = MediaPlayer.create(mContext, R.raw.waiting_atendence_sound);
+        alertSound.setLooping(true);
+        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
     }
 
     public void solveCallItem(CallItem solvedItem){
         Integer foundedItemIndex = null;
+        boolean anyUnsolvedCall = false;
         for(int i=0; i<callItems.size() ;i++) {
             if(callItems.get(i).get_id().equals(solvedItem.get_id())){
                 foundedItemIndex =i;
             }
+            if(callItems.get(i).getCall_solved_at()==null)
+                anyUnsolvedCall = true;
         }
         if(foundedItemIndex!=null){
             callItems.remove(callItems.get(foundedItemIndex));
             callItems.add(solvedItem);
         }
+
+        if(!anyUnsolvedCall) alertSound.pause();
+        notifyDataSetChanged();
     }
 
     public void receivedCallItem(CallItem receivedCallItem){
         callItems.add(1,receivedCallItem);
         notifyDataSetChanged();
+        alertSound.start();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                alertSound.pause();
+            }
+        },300000);
     }
 
     private void organizeListView(){
@@ -109,6 +135,7 @@ public class SectionTwoCallAdapter extends ArrayAdapter<CallItem> {
                 mViewHolder.itemPatientNecessityTextView = (TextView) convertView.findViewById(R.id.list_item_section_two_call_pacient_necessity_textView);
                 mViewHolder.itemIconImageView = (ImageView) convertView.findViewById(R.id.list_item_section_two_call_icon_image);
                 mViewHolder.itemTimeTextView = (TextView) convertView.findViewById(R.id.list_item_section_two_call_time_textView);
+                mViewHolder.itemDayTextView = (TextView) convertView.findViewById(R.id.list_item_section_two_call_day_textView);
                 mViewHolder.itemStatusTextView = (TextView) convertView.findViewById(R.id.list_item_call_status_TextView);
                 convertView.setTag(mViewHolder);
             }else{
@@ -149,25 +176,27 @@ public class SectionTwoCallAdapter extends ArrayAdapter<CallItem> {
                 mViewHolder.itemPatientNecessityTextView.setTextColor(mContext.getResources().getColor(nameAndStatustextColor));
                 mViewHolder.itemStatusTextView.setTextColor(mContext.getResources().getColor(nameAndStatustextColor));
                 mViewHolder.itemTimeTextView.setTextColor(mContext.getResources().getColor(nameAndStatustextColor));
+                mViewHolder.itemDayTextView.setTextColor(mContext.getResources().getColor(nameAndStatustextColor));
 
                 mViewHolder.itemStatusTextView.setVisibility(View.VISIBLE);
                 mViewHolder.itemTimeTextView.setVisibility(View.VISIBLE);
                 mViewHolder.itemIconImageView.setVisibility(View.VISIBLE);
                 mViewHolder.itemIconImageView.setVisibility(View.VISIBLE);
 
-                if(status == Constants.CALL_STATUS_WATING_TO_SERVE){
-                    mViewHolder.itemStatusTextView.setText("Aguardando");
-                    mViewHolder.itemLinearLayout.setAlpha(1f);
-                }
-                if(status == Constants.CALL_STATUS_SERVED) {
+                if(status == Constants.CALL_STATUS_SERVED){
                     mViewHolder.itemStatusTextView.setText("Resolvido");
                     mViewHolder.itemLinearLayout.setAlpha(0.2f);
                 }
+                else{
+                    mViewHolder.itemStatusTextView.setText("Aguardando");
+                    mViewHolder.itemLinearLayout.setAlpha(1f);
+                }
 
-                mViewHolder.itemPatientNameTextView.setText(findPatientName(item));
+                mViewHolder.itemPatientNameTextView.setText(item.getName());
                 mViewHolder.itemPatientNecessityTextView.setText(necessityString);
 
-                mViewHolder.itemTimeTextView.setText(dateFormat.format(item.getCreated_at())+" ~ "+((item.getCall_solved_at()==null) ? "Em aberto" : dateFormat.format(item.getCall_solved_at())));
+                mViewHolder.itemTimeTextView.setText(hourDateFormat.format(item.getCreated_at())+" ~ "+((item.getCall_solved_at()==null) ? "Em aberto" : hourDateFormat.format(item.getCall_solved_at())));
+                mViewHolder.itemDayTextView.setText(dayDateFormat.format(item.getCreated_at()));
             }
             else{
                 mViewHolder.itemStatusTextView.setVisibility(View.GONE);
@@ -186,24 +215,13 @@ public class SectionTwoCallAdapter extends ArrayAdapter<CallItem> {
         return convertView;
     }
 
-
-    private String findPatientName(CallItem callItem){
-        for(int i=0;i < patients.size();i++){
-            Patient patient = patients.get(i);
-            for (int j=0;j < patient.getCalls().size();j++){
-                if ((callItem.get_id()).equals(patient.getCalls().get(j)))
-                    return patient.getName();
-            }
-        }
-        return "SemNome";
-    }
-
     private static class ViewHolder{
         public LinearLayout itemLinearLayout;
         public ImageView itemIconImageView;
         public TextView itemPatientNameTextView;
         public TextView itemPatientNecessityTextView;
         public TextView itemTimeTextView;
+        public TextView itemDayTextView;
         public TextView itemStatusTextView;
     }
 
